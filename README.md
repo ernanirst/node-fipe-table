@@ -1,7 +1,7 @@
 Node FIPE Table
 =================
 
-Node SDK to retrive information of the FIPE table.
+:blue_car: :minibus: :truck: Node SDK to retrive information about Brazil's vehicles prices
 
 ## About FIPE
 
@@ -13,7 +13,7 @@ FIPE is the Foundation Institute for Economic Research of the University of Sao 
 
 ## About the SDK
 
-This SDK is the result of a lot of try and error with the API used by FIPE's official website. The website is the only place where FIPE releases its data, therefore, nothing more convienient than a SDK to retrive data directly from the API used by the website.
+This SDK is result of a lot of try and error with the API used by FIPE's official website. The website is the only place where FIPE releases its data, therefore, nothing more convienient than a SDK to retrive data directly from the API used by the website.
 
 ## Getting Started
 
