@@ -29,12 +29,12 @@ export default class FipeSDK {
   fetchLatestAvailableDate() {
     return new Promise( (resolve, reject) => {
       this.fetchAvailableDate()
-        .then( dates => resolve(dates[0]))
-        .catch( err => reject(err))
+        .then( dates => resolve(dates[0]) )
+        .catch( err => reject(err) )
     })
   }
 
-  fetchAvailableBrandsByCode(typeOfVehicle, codeDate) {
+  fetchAvailableBrands(typeOfVehicle, codeDate) {
     return new Promise( async (resolve, reject) => {
       const vehicleCode = vehicleType.indexOf(typeOfVehicle) + 1
       if (vehicleCode < 1 || vehicleCode > 3)
@@ -46,10 +46,8 @@ export default class FipeSDK {
           await this.fetchLatestAvailableDate()
             .then( date => codeDate = date.code)
             .catch( err => reject(err) )
-        console.log('codeDate', codeDate)
-        fipeClient.post('/ConsultarMarcas', 
-          qs.stringify({ codigoTabelaReferencia: codeDate, codigoTipoVeiculo: vehicleCode })
-        ).then( response => {
+        fipeClient.post('/ConsultarMarcas', qs.stringify({ codigoTabelaReferencia: codeDate, codigoTipoVeiculo: vehicleCode }))
+          .then( response => {
           if (response.status === 200) {
             resolve(response.data.map( item => { 
               return { brand: item.Label, code: item.Value }
@@ -66,5 +64,38 @@ export default class FipeSDK {
       }
     })
   }
+
+  fetchAvailableModelsByCode(typeOfVehicle, brandCode, dateCode) {
+    return new Promise( async (resolve, reject) => {
+      const vehicleCode = vehicleType.indexOf(typeOfVehicle) + 1
+      if (vehicleCode < 1 || vehicleCode > 3)
+        reject({ message: `Type of vehicle [${typeOfVehicle}] must be 'car', 'truck' or 'motor'` })
+      if (!Number.isInteger(brandCode) || brandCode < 0) 
+        reject({ message: `Parameter brandCode must be a positive integer` })
+      if (dateCode && (!Number.isInteger(dateCode) || dateCode < 0))
+        reject({ message: `Parameter dateCode must be a positive integer` })
+      else {
+        if (!dateCode)
+          await this.fetchLatestAvailableDate()
+            .then( date => dateCode = date.code)
+            .catch( err => reject(err) )
+        fipeClient.post('/ConsultarModelos', qs.stringify({ codigoTabelaReferencia: dateCode, codigoTipoVeiculo: vehicleCode, codigoMarca: brandCode }))
+          .then( response => {
+            if (response.status === 200 && response.data.Modelos) {
+              resolve(response.data.Modelos.map( item => {
+                return { model: item.Label, code: item.Value }
+              }))
+            } else {
+              reject({ status: response.status, body: response.data, message: 'Could not retrieve available models'  })
+            }
+          })
+          .catch( err => reject(err) )
+      }
+    })
+  }
+
+  getVehicleCode(vehicleName) {
+    return vehicleType.indexOf(typeOfVehicle) + 1
+  } 
 
 }
