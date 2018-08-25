@@ -125,6 +125,42 @@ export default class FipeSDK {
     })
   }
 
+  fetchPriceByCode(typeOfVehicle, brandCode, modelCode, year, fuelCode, dateCode) {
+    return new Promise( async (resolve, reject) => {
+      const vehicleCode = vehicleType.indexOf(typeOfVehicle) + 1
+      if (vehicleCode < 1 || vehicleCode > 3)
+        reject({ message: `Type of vehicle [${typeOfVehicle}] must be 'car', 'truck' or 'motor'` })
+      if (!Number.isInteger(brandCode) || brandCode < 0) 
+        reject({ message: `Parameter brandCode must be a positive integer` })
+      if (!Number.isInteger(modelCode) || modelCode < 0) 
+        reject({ message: `Parameter modelCode must be a positive integer` })  
+      if (dateCode && (!Number.isInteger(dateCode) || dateCode < 0))
+        reject({ message: `Parameter dateCode must be a positive integer` })
+      if (year < 0) 
+        reject({ message: `Parameter year must be a positive integer` })
+      else {
+        if (!dateCode)
+          await this.fetchLatestAvailableDate()
+            .then( date => dateCode = date.code)
+            .catch( err => reject(err) )
+        fipeClient.post('/ConsultarValorComTodosParametros', qs.stringify({ 
+          codigoTabelaReferencia: dateCode, codigoTipoVeiculo: vehicleCode, 
+          codigoMarca: brandCode, codigoModelo: modelCode, anoModelo: year, 
+          codigoTipoCombustivel: fuelCode, tipoConsulta: 'tradicional'
+        }))
+          .then( response => {
+            if (response.status === 200) {
+              resolve({ price: Number(response.data.Valor
+                .replace('R$ ', '').replace('.', '').replace(',', '.'))
+              })
+            } else {
+              reject({ status: response.status, body: response.data, message: 'Could not retrieve the estimated price' })
+            }
+          })
+      }
+    })
+  }
+
   getVehicleCode(vehicleName) {
     return vehicleType.indexOf(typeOfVehicle) + 1
   } 
