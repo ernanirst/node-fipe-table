@@ -1,0 +1,27 @@
+{
+  "name": "fipe-table",
+  "version": "1.0.0",
+  "description": "Node SDK to retrive information of the FIPE table.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf dist/ && babel ./src --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files --source-maps",
+    "start": "npm run build && node dist/index.js",
+    "demo": "npm run build && node dist/demo/app.js",
+    "debug": "npm run build && node --nolazy --inspect-brk=9229 dist/index.js"
+  },
+  "author": "ernanirst@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "npm": "^6.4.0",
+    "qs": "^6.5.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "rimraf": "^2.6.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.0"
+  }
+}
