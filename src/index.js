@@ -86,10 +86,41 @@ export default class FipeSDK {
                 return { model: item.Label, code: item.Value }
               }))
             } else {
-              reject({ status: response.status, body: response.data, message: 'Could not retrieve available models'  })
+              reject({ status: response.status, body: response.data, message: 'Could not retrieve available models' })
             }
           })
           .catch( err => reject(err) )
+      }
+    })
+  }
+
+  fetchAvailableYearsByCode(typeOfVehicle, brandCode, modelCode, dateCode) {
+    return new Promise( async (resolve, reject) => {
+      const vehicleCode = vehicleType.indexOf(typeOfVehicle) + 1
+      if (vehicleCode < 1 || vehicleCode > 3)
+        reject({ message: `Type of vehicle [${typeOfVehicle}] must be 'car', 'truck' or 'motor'` })
+      if (!Number.isInteger(brandCode) || brandCode < 0) 
+        reject({ message: `Parameter brandCode must be a positive integer` })
+      if (!Number.isInteger(modelCode) || modelCode < 0) 
+        reject({ message: `Parameter modelCode must be a positive integer` })  
+      if (dateCode && (!Number.isInteger(dateCode) || dateCode < 0))
+        reject({ message: `Parameter dateCode must be a positive integer` })
+      else {
+        if (!dateCode)
+          await this.fetchLatestAvailableDate()
+            .then( date => dateCode = date.code)
+            .catch( err => reject(err) )
+        fipeClient.post('/ConsultarAnoModelo', qs.stringify({ codigoTabelaReferencia: dateCode, codigoTipoVeiculo: vehicleCode, codigoMarca: brandCode, codigoModelo: modelCode }))
+          .then( response => {
+            if (response.status === 200) {
+              resolve(response.data.map( item => {
+                const splitCode = item.Value.split('-')
+                return { name: item.Label, year: Number(splitCode[0]), fuelCode: splitCode[1] }
+              }))
+            } else {
+              reject({ status: response.status, body: response.data, message: 'Could not retrieve available years' })
+            }
+          })
       }
     })
   }
