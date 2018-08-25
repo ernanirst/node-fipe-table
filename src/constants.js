@@ -13,4 +13,10 @@ const portugueseMonths = [
   'dezembro'
 ]
 
-export { portugueseMonths }
+const vehicleType = [
+  'car',
+  'truck',
+  'motor'
+]
+
+export { portugueseMonths, vehicleType }
