@@ -100,9 +100,9 @@ export default class DefaultFipeSDK {
       if (vehicleCode < 1 || vehicleCode > 3)
         reject({ message: `Type of vehicle [${typeOfVehicle}] must be 'car', 'truck' or 'motor'` })
       if (!Number.isInteger(brandCode) || brandCode < 0) 
-        reject({ message: `Parameter brandCode must be a positive integer` })
+        reject({ message: `Parameter brandCode must be a positive integer: ${brandCode}` })
       if (!Number.isInteger(modelCode) || modelCode < 0) 
-        reject({ message: `Parameter modelCode must be a positive integer` })  
+        reject({ message: `Parameter modelCode must be a positive integer: ${modelCode}` })  
       if (dateCode && (!Number.isInteger(dateCode) || dateCode < 0))
         reject({ message: `Parameter dateCode must be a positive integer` })
       else {

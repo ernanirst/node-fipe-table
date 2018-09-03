@@ -30,11 +30,35 @@ export default class FipeSDK extends DefaultFipeSDK {
   findModelsByBrand(typeOfVehicle, brandName) {
     return new Promise( async (resolve, reject) => {
       const brand = await this.fetchAvailableBrands(typeOfVehicle)
-        .then( response => response.filter( item => item.brand.toLowerCase() === brandName)[0] )
+        .then( response => response.filter( item => item.brand.toLowerCase() === brandName.toLocaleLowerCase())[0] )
         .catch( err => reject(err))
       const models = await this.fetchAvailableModelsByCode(typeOfVehicle, brand.code)
         .catch( err => reject(err))
-      resolve(models)
+      resolve({ models, brandCode: brand.code })
+    })
+  }
+
+  /**
+   * Find all years by brand and model name
+   * @param {String} typeOfVehicle The vehicle's
+   * type: 'car', 'truck' or 'motor'
+   * @param {String} brandName The vehicle's
+   * brand name
+   * @param {*} modelName The vehicle's model
+   * name
+   */
+  findYearsByBrandAndModel(typeOfVehicle, brandName, modelName) {
+    return new Promise( async (resolve, reject) => {
+      const model = await this.findModelsByBrand(typeOfVehicle, brandName)
+        .then( response => {
+          const selectedModel = response.models
+              .filter( item => item.model.toLowerCase() === modelName.toLocaleLowerCase())[0]
+          return { brandCode: response.brandCode, model: selectedModel.model, code: selectedModel.code }
+        })
+        .catch( err => reject(err))
+      const years = await this.fetchAvailableYearsByCode(typeOfVehicle, model.brandCode, model.code)
+        .then(years => resolve({ brandCode: model.brandCode, modelCode: model.code, years }))
+        .catch( err => reject(err))
     })
   }
 
