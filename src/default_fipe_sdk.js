@@ -50,7 +50,7 @@ export default class DefaultFipeSDK {
           .then( response => {
           if (response.status === 200) {
             resolve(response.data.map( item => { 
-              return { brand: item.Label, code: item.Value }
+              return { brand: item.Label, code: Number(item.Value) }
             }))
           } else {
             reject({ 
@@ -71,7 +71,7 @@ export default class DefaultFipeSDK {
       if (vehicleCode < 1 || vehicleCode > 3)
         reject({ message: `Type of vehicle [${typeOfVehicle}] must be 'car', 'truck' or 'motor'` })
       if (!Number.isInteger(brandCode) || brandCode < 0) 
-        reject({ message: `Parameter brandCode must be a positive integer` })
+        reject({ message: `Parameter brandCode must be a positive integer: ${brandCode}` })
       if (dateCode && (!Number.isInteger(dateCode) || dateCode < 0))
         reject({ message: `Parameter dateCode must be a positive integer` })
       else {
