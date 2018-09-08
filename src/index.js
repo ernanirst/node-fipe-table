@@ -62,4 +62,20 @@ export default class FipeSDK extends DefaultFipeSDK {
     })
   }
 
+  estimatePrice(typeOfVehicle, brandName, modelName, yearModel, fuelCode) {
+    return new Promise( async (resolve, reject) => {
+      const model = await this.findModelsByBrand(typeOfVehicle, brandName)
+        .then( response => {
+          const selectedModel = response.models
+              .filter( item => item.model.toLowerCase() === modelName.toLocaleLowerCase())[0]
+          return { brandCode: response.brandCode, model: selectedModel.model, code: selectedModel.code }
+        })
+        .catch( err => reject(err))
+        
+      const fipeEstimate = await this.fetchPriceByCode(typeOfVehicle, model.brandCode, model.code, yearModel, fuelCode)
+        .then( response => resolve(response) )
+        .catch( err => reject(err) )
+    })
+  }
+
 }
