@@ -57,6 +57,7 @@ There are also more high level functions available on the [index file](src/index
 import FipeSDK from 'fipe-table'
 
 const fipeSDK = new FipeSDK()
+const VEHICLE = 'car'
 
 fipeSDK.findModelsByBrand(VEHICLE, 'Fiat')
   .then( models => console.log(models) )
@@ -68,10 +69,13 @@ And finally:
 import FipeSDK from 'fipe-table'
 
 const fipeSDK = new FipeSDK()
+const VEHICLE = 'car'
 
 fipeSDK.estimatePrice(VEHICLE, 'Fiat', 'Palio 1.0 Cel. ECON./ITALIA F.Flex 8V 4p', 2014, 1)
-  .then( models => console.log(models) )
+  .then( price => console.log(price) )
 ```
+
+Also, the `VEHICLE` argument can be one of: `'car'`, `'truck'`, `'motor'`.
 
 ## About FIPE
 
