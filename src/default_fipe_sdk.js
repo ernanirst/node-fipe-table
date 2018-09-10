@@ -4,9 +4,6 @@ import { portugueseMonths, vehicleType } from './constants'
 
 export default class DefaultFipeSDK {
 
-  /**
-   * Fetch the dates on which the research was done
-   */
   fetchAvailableDate() {
     return new Promise( (resolve, reject) => {
       fipeClient.post('/ConsultarTabelaDeReferencia')
