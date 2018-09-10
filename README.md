@@ -15,7 +15,7 @@ Install the module with the classic:
 
 Now run the following sample to list all available dates on which the research was made
 
-```
+```javascript
 import FipeSDK from 'fipe-table'
 
 const fipeSDK = new FipeSDK()
@@ -26,7 +26,7 @@ fipeSDK.fetchAvailableDate()
 
 You can list the available brands using the code of the date obtained on the previous sample
 
-```
+```javascript
 import FipeSDK from 'fipe-table'
 
 const fipeSDK = new FipeSDK()
@@ -39,7 +39,7 @@ fipeSDK.fetchAvailableBrands(VEHICLE, codeDate)
 
 It's also possible to ommit the last argument to use the latest date of research
 
-```
+```javascript
 import FipeSDK from 'fipe-table'
 
 const fipeSDK = new FipeSDK()
@@ -47,6 +47,30 @@ const VEHICLE = 'car'
 
 fipeSDK.fetchAvailableBrands(VEHICLE)
   .then( brands => console.log(brands) )
+```
+
+All the raw HTTP requests performed by these SDK are implemented on this [file](src/default_fipe_sdk.js), it will be usefull to explore all functions available.
+
+There are also more high level functions available on the [index file](src/index.js). With these functions you can query using names, e.g.:
+
+```javascript
+import FipeSDK from 'fipe-table'
+
+const fipeSDK = new FipeSDK()
+
+fipeSDK.findModelsByBrand(VEHICLE, 'Fiat')
+  .then( models => console.log(models) )
+```
+
+And finally:
+
+```javascript
+import FipeSDK from 'fipe-table'
+
+const fipeSDK = new FipeSDK()
+
+fipeSDK.estimatePrice(VEHICLE, 'Fiat', 'Palio 1.0 Cel. ECON./ITALIA F.Flex 8V 4p', 2014, 1)
+  .then( models => console.log(models) )
 ```
 
 ## About FIPE
