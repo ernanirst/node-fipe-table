@@ -1,7 +1,6 @@
 import DefaultFipeSDK from './default_fipe_sdk'
-import { vehicleType } from './constants'
 
-export default class FipeSDK extends DefaultFipeSDK {
+export class FipeSDK extends DefaultFipeSDK {
 
   /**
    * Verifies if the desired brand is available
