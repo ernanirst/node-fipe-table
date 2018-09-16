@@ -1,26 +1,37 @@
 {
   "name": "fipe-table",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Node SDK to retrive information of the FIPE table.",
+  "keywords": [
+    "fipe-table",
+    "brazil",
+    "vehicles",
+    "prices",
+    "cars"
+  ],
+  "author": "ernanirst@gmail.com",
+  "license": "MIT",
+  "homepage": "https://github.com/ernanirst/node-fipe-table/blob/master/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ernanirst/node-fipe-table.git"
+  },
   "main": "./dist/index.js",
   "scripts": {
     "clean": "rimraf dist",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run clean && babel ./src --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files --source-maps",
+    "build": "npm run clean && babel ./src --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
     "start": "npm run build && node dist/index.js",
     "demo": "npm run build && node dist/demo/app.js",
-    "debug": "npm run build && node --nolazy --inspect-brk=9229 dist/index.js",
+    "debug": "npm run clean && babel ./src --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files --source-maps && node --nolazy --inspect-brk=9229 dist/index.js",
     "prepublish": "npm run build"
   },
-  "author": "ernanirst@gmail.com",
-  "license": "MIT",
   "dependencies": {
     "axios": "^0.18.0",
     "npm": "^6.4.1",
     "qs": "^6.5.2"
   },
   "devDependencies": {
-    "await-sleep": "0.0.1",
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "rimraf": "^2.6.2",
