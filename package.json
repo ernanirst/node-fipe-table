@@ -1,6 +1,6 @@
 {
   "name": "fipe-table",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Node SDK to retrive information of the FIPE table.",
   "keywords": [
     "fipe-table",
@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "npm": "^6.4.1",
     "qs": "^6.5.2"
   },
   "devDependencies": {
