@@ -1,12 +1,18 @@
 import qs from 'qs'
-import { fipeClient } from './config'
+import { deafultFipeClient } from './config'
 import { portugueseMonths, vehicleType } from './constants'
 
 export default class DefaultFipeSDK {
+  constructor( axiosInstance ) {
+    if (axiosInstance)
+      this.fipeClient = axiosInstance
+    else 
+      this.fipeClient = deafultFipeClient
+  }
 
   fetchAvailableDate() {
     return new Promise( (resolve, reject) => {
-      fipeClient.post('/ConsultarTabelaDeReferencia')
+      this.fipeClient.post('/ConsultarTabelaDeReferencia')
         .then( response => {
           if (response.status === 200) {
             resolve(response.data.map( item => {
@@ -43,7 +49,7 @@ export default class DefaultFipeSDK {
           await this.fetchLatestAvailableDate()
             .then( date => codeDate = date.code)
             .catch( err => reject(err) )
-        fipeClient.post('/ConsultarMarcas', qs.stringify({ codigoTabelaReferencia: codeDate, codigoTipoVeiculo: vehicleCode }))
+        this.fipeClient.post('/ConsultarMarcas', qs.stringify({ codigoTabelaReferencia: codeDate, codigoTipoVeiculo: vehicleCode }))
           .then( response => {
           if (response.status === 200) {
             resolve(response.data.map( item => { 
@@ -76,7 +82,7 @@ export default class DefaultFipeSDK {
           await this.fetchLatestAvailableDate()
             .then( date => dateCode = date.code)
             .catch( err => reject(err) )
-        fipeClient.post('/ConsultarModelos', qs.stringify({ codigoTabelaReferencia: dateCode, codigoTipoVeiculo: vehicleCode, codigoMarca: brandCode }))
+        this.fipeClient.post('/ConsultarModelos', qs.stringify({ codigoTabelaReferencia: dateCode, codigoTipoVeiculo: vehicleCode, codigoMarca: brandCode }))
           .then( response => {
             if (response.status === 200 && response.data.Modelos) {
               resolve(response.data.Modelos.map( item => {
@@ -107,7 +113,7 @@ export default class DefaultFipeSDK {
           await this.fetchLatestAvailableDate()
             .then( date => dateCode = date.code)
             .catch( err => reject(err) )
-        fipeClient.post('/ConsultarAnoModelo', qs.stringify({ codigoTabelaReferencia: dateCode, codigoTipoVeiculo: vehicleCode, codigoMarca: brandCode, codigoModelo: modelCode }))
+        this.fipeClient.post('/ConsultarAnoModelo', qs.stringify({ codigoTabelaReferencia: dateCode, codigoTipoVeiculo: vehicleCode, codigoMarca: brandCode, codigoModelo: modelCode }))
           .then( response => {
             if (response.status === 200) {
               resolve(response.data.map( item => {
@@ -140,7 +146,7 @@ export default class DefaultFipeSDK {
           await this.fetchLatestAvailableDate()
             .then( date => dateCode = date.code)
             .catch( err => reject(err) )
-        fipeClient.post('/ConsultarValorComTodosParametros', qs.stringify({ 
+        this.fipeClient.post('/ConsultarValorComTodosParametros', qs.stringify({ 
           codigoTabelaReferencia: dateCode, codigoTipoVeiculo: vehicleCode, 
           codigoMarca: brandCode, codigoModelo: modelCode, anoModelo: year, 
           codigoTipoCombustivel: fuelCode, tipoConsulta: 'tradicional'

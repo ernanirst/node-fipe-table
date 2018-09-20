@@ -77,6 +77,28 @@ fipeSDK.estimatePrice(VEHICLE, 'Fiat', 'Palio 1.0 Cel. ECON./ITALIA F.Flex 8V 4p
 
 Also, the `VEHICLE` argument can be one of: `'car'`, `'truck'`, `'motor'`.
 
+If you would like to config `axios` yourself, you can pass the axios instance to the constructor as well. This will be usefull if any error handling for HTTP requests is desired, the sample below always retry when the `statusCode` of the request is not equal to 200.
+
+```javascript
+const axiosInstance = axios.create({
+  baseURL: 'http://veiculos.fipe.org.br/api/veiculos/',
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Referer': 'http://veiculos.fipe.org.br/'
+  }
+})
+
+axiosInstance.interceptors.response.use(undefined, (err) => {
+  if (err.status !== 200 && err.config) {
+    return axios(err.config)
+  }
+  throw err
+})
+
+const fipeSDK = new FipeSDK( axiosInstance )
+```
+
 ## About FIPE
 
 FIPE is the Foundation Institute for Economic Research of the University of Sao Paulo. According to its website, it was founded in 1973 to support the University in the areas of education, projects, research and development of economic and financial indicators. Today, FIPE is one of Brazil's most prestigious developer of financial indicators, beign responsible for (among others) the "FIPE Table", which is an important indicator of the average vehicle prices, and the IPC (Consumer Price Index), which measures the inflation of the State of Sao Paulo. The FIPE Table provides reliable price data in three different categories: 
